@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ thread[2] }} - {{ thread[1] }} - ALEK</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto;
+    background-image:     url("{{ url_for('static',filename='background_end.png') }}");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    }
+    h1 { margin-bottom: 20px; }
+    .post { border-bottom: 1px solid #ddd; padding: 15px 0; }
+    .post img { max-width: 200px; display: block; margin-top: 8px; }
+    form { margin-top: 30px; }
+    textarea { width: 100%; height: 80px; padding: 8px; }
+    input[type="file"] { margin-top: 10px; }
+    input[type="submit"] { margin-top: 10px; padding: 6px 12px; }
+
+    /* Back arrow button style */
+    .back-arrow {
+      display: inline-block;
+      position: relative;
+      padding: 8px 20px 8px 35px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #333;
+      background-color: #f8f8f8;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    .back-arrow:hover {
+      background-color: #e0e0e0;
+      border-color: #888;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+      color: #000;
+    }
+
+    /* Left arrow shape using CSS before */
+    .back-arrow::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%) rotate(135deg);
+      border: solid #333;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 6px;
+      transition: border-color 0.3s ease;
+    }
+
+    .back-arrow:hover::before {
+      border-color: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{ thread[2] }}</h1>
+  <p>
+    <a href="{{ url_for('board_view', board=thread[1]) }}" class="back-arrow">Back to thread</a>
+  </p>
+
+  <div id="posts">
+    {% for post in posts %}
+      <div class="post">
+        <p>{{ post[2] }}</p>
+        {% if post[3] %}
+          <img src="{{ url_for('static', filename=post[3]) }}" alt="Image" />
+        {% endif %}
+      </div>
+    {% else %}
+      <p>No posts yet. Be the first to reply!</p>
+    {% endfor %}
+  </div>
+
+  <hr />
+
+  <h2>Reply to Thread</h2>
+  <form action="{{ url_for('reply', board=thread[1], thread_id=thread[0]) }}" method="post" enctype="multipart/form-data">
+    <textarea name="content" placeholder="Your reply..." required></textarea><br />
+    <input type="file" name="image" accept="image/*" />
+    <input type="submit" value="Post Reply" />
+  </form>
+</body>
+</html>
+

@@ -1,0 +1,90 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ALEK - Boards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      text-align: center;
+      
+      background-image:     url("{{ url_for('static',filename='background_board.png') }}");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .az-filter {
+      margin-top: 40px;
+    }
+
+    .az-filter a {
+      margin: 0 5px;
+      text-decoration: none;
+      font-weight: bold;
+      color: black; /* default black */
+      font-size: 18px;
+      transition: color 0.3s ease;
+    }
+
+    .az-filter a.selected {
+      color: black;
+      text-decoration: underline;
+      pointer-events: none;
+    }
+
+    .az-filter a:hover:not(.selected) {
+      color: grey; /* hover grey */
+    }
+
+    .board-link {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 20px;
+      color: #333;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: #f8f8f8;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    .board-link:hover {
+      background-color: #e0e0e0;
+      border-color: #888;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Boards</h1>
+
+  {% if boards %}
+    {% for board in boards %}
+      <a class="board-link" href="{{ url_for('board_view', board=board) }}">
+        {{ board }}
+      </a>
+    {% endfor %}
+  {% else %}
+    <p>No boards found for letter '{{ letter }}'.</p>
+  {% endif %}
+
+  <div class="az-filter">
+    <a href="{{ url_for('index') }}" class="{{ '' if letter else 'selected' }}">All</a>
+    {% for char in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+      <a href="{{ url_for('index', letter=char) }}" class="{{ 'selected' if letter == char else '' }}">{{ char }}</a>
+    {% endfor %}
+  </div>
+
+</body>
+</html>
+

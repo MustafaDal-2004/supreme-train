@@ -1,0 +1,121 @@
+<!-- templates/board.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ board }} - ALEK123</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px   auto;
+
+    background-image: url("{{ url_for('static', filename='background_board.png') }}");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  
+    }
+    h1 { margin-bottom: 20px; }
+    .thread { border-bottom: 1px solid #ccc; padding: 10px 0; }
+
+    a.thread-link {
+      font-size: 18px;
+      color: black;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a.thread-link:hover {
+      color: grey;
+    }
+
+    /* Search form styles */
+    form.search-form {
+      margin-bottom: 20px;
+    }
+    form.search-form input[type="text"] {
+      padding: 6px;
+      width: 250px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    form.search-form input[type="submit"] {
+      padding: 6px 12px;
+      font-size: 16px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    form.search-form input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    form { margin-top: 30px; }
+    input[type="text"].new-thread-input { width: 300px; padding: 6px; }
+    input[type="submit"].new-thread-submit { padding: 6px 12px; }
+
+    /* Back arrow link styles */
+    .back-arrow {
+      display: inline-block;
+      position: relative;
+      padding: 10px 20px 10px 40px;
+      font-size: 18px;
+      color: #333;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: #f8f8f8;
+      text-decoration: none;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+      cursor: pointer;
+    }
+    .back-arrow::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 8px solid transparent;
+      border-right-color: #333;
+    }
+    .back-arrow:hover {
+      background-color: #e0e0e0;
+      border-color: #888;
+      color: grey;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{ board }} - Threads</h1>
+
+  <!-- Search form -->
+  <form class="search-form" method="GET" action="{{ url_for('board_view', board=board) }}">
+    <input type="text" name="q" placeholder="Search threads..." value="{{ request.args.get('q', '') }}" />
+    <input type="submit" value="Search" />
+  </form>
+
+  {% for thread in threads %}
+    <div class="thread">
+      <a class="thread-link" href="{{ url_for('view_thread', board=board, thread_id=thread[0]) }}">
+        {{ thread[2] }}
+      </a>
+    </div>
+  {% else %}
+    <p>No threads yet. Create one!</p>
+  {% endfor %}
+
+  <hr />
+
+  <h2>Create New Thread</h2>
+  <form action="{{ url_for('new_thread', board=board) }}" method="post">
+    <input type="text" name="title" placeholder="Thread title" required class="new-thread-input" />
+    <input type="submit" value="Create" class="new-thread-submit" />
+  </form>
+
+  <p>
+    <a href="{{ url_for('index') }}" class="back-arrow">Back to boards</a>
+  </p>
+</body>
+</html>
+
